@@ -1,7 +1,6 @@
 package com.coderscampus;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,16 +15,29 @@ public class Main {
 		FileService fileService = new FileService();
 		
 		fileService.readFile("model3.csv", monthlySalesList);
-		findAndPrintSalesInfoModel3(monthlySalesList);
+		findAndPrintSalesInfo("Model 3", 17, monthlySalesList);
 		
 		fileService.readFile("modelS.csv", monthlySalesList);
-		findAndPrintSalesInfoModelS(monthlySalesList);
+		findAndPrintSalesInfo("Model S", 16, monthlySalesList);
 		
 		fileService.readFile("modelX.csv", monthlySalesList);
-		findAndPrintSalesInfoModelX(monthlySalesList);
-		
-		//System.out.println(monthlySalesList.toString());
+		findAndPrintSalesInfo("Model X", 16, monthlySalesList);
 
+	}
+	
+	public static void findAndPrintSalesInfo(String model, int firstYearOfProduction, List<MonthlySale> monthlySalesList) {
+		System.out.println(model + " Yearly Sales Report");
+		System.out.println("---------------");
+		
+		for (int i = firstYearOfProduction; i < 20; i++) {
+			findAndPrintYearSales(monthlySalesList, String.valueOf(i));
+		}
+		
+		printSuperlativeMonths(monthlySalesList, model);
+		
+		System.out.println();
+		
+		monthlySalesList.clear();
 	}
 	
 	public static void findAndPrintYearSales(List<MonthlySale> monthlySalesList, String year) {
@@ -38,94 +50,21 @@ public class Main {
 		
 	}
 	
-public static void findAndPrintSalesInfoModel3(List<MonthlySale> monthlySalesList) {
+	public static void printSuperlativeMonths(List<MonthlySale> monthlySalesList, String model) {
 		
-		System.out.println("Model 3 Yearly Sales Report");
-		System.out.println("---------------");
-		
-		findAndPrintYearSales(monthlySalesList, "17");
-		findAndPrintYearSales(monthlySalesList, "18");
-		findAndPrintYearSales(monthlySalesList, "19");
-		
-		Optional<MonthlySale> maxSalesObjectModel3 = monthlySalesList.stream()
+		Optional<MonthlySale> maxSalesObject = monthlySalesList.stream()
 				.max(Comparator.comparingInt(MonthlySale::getSales));
 		
-		Optional<MonthlySale> minSalesObjectModel3 = monthlySalesList.stream()
+		Optional<MonthlySale> minSalesObject = monthlySalesList.stream()
 				.min(Comparator.comparingInt(MonthlySale::getSales));
 		
-		maxSalesObjectModel3.ifPresent(sales -> System.out.println("The best month for Model 3 was " + 
+		maxSalesObject.ifPresent(sales -> System.out.println("The best month for " + model + " was " + 
 							LocalDate.parse("01-" + sales.getDate(), DateTimeFormatter.ofPattern("dd-MMM-yy"))
 							.format(DateTimeFormatter.ofPattern("yyyy-MM"))));
 		
-		minSalesObjectModel3.ifPresent(sales -> System.out.println("The worst month for Model 3 was " + 
+		minSalesObject.ifPresent(sales -> System.out.println("The worst month for " + model + " was " + 
 				LocalDate.parse("01-" + sales.getDate(), DateTimeFormatter.ofPattern("dd-MMM-yy"))
 				.format(DateTimeFormatter.ofPattern("yyyy-MM"))));
-		
-		System.out.println();
-		
-		monthlySalesList.clear();
-		
 	}
 	
-public static void findAndPrintSalesInfoModelS(List<MonthlySale> monthlySalesList) {
-		
-		System.out.println("Model S Yearly Sales Report");
-		System.out.println("---------------");
-		
-		findAndPrintYearSales(monthlySalesList, "16");
-		findAndPrintYearSales(monthlySalesList, "17");
-		findAndPrintYearSales(monthlySalesList, "18");
-		findAndPrintYearSales(monthlySalesList, "19");
-
-		Optional<MonthlySale> maxSalesObjectModel3 = monthlySalesList.stream()
-				.max(Comparator.comparingInt(MonthlySale::getSales));
-		
-		Optional<MonthlySale> minSalesObjectModel3 = monthlySalesList.stream()
-				.min(Comparator.comparingInt(MonthlySale::getSales));
-		
-		maxSalesObjectModel3.ifPresent(sales -> System.out.println("The best month for Model S was " + 
-							LocalDate.parse("01-" + sales.getDate(), DateTimeFormatter.ofPattern("dd-MMM-yy"))
-							.format(DateTimeFormatter.ofPattern("yyyy-MM"))));
-		
-		minSalesObjectModel3.ifPresent(sales -> System.out.println("The worst month for Model S was " + 
-				LocalDate.parse("01-" + sales.getDate(), DateTimeFormatter.ofPattern("dd-MMM-yy"))
-				.format(DateTimeFormatter.ofPattern("yyyy-MM"))));
-		
-		System.out.println();
-		
-		monthlySalesList.clear();
-		
-	}
-
-public static void findAndPrintSalesInfoModelX(List<MonthlySale> monthlySalesList) {
-	
-	System.out.println("Model X Yearly Sales Report");
-	System.out.println("---------------");
-	
-	findAndPrintYearSales(monthlySalesList, "16");
-	findAndPrintYearSales(monthlySalesList, "17");
-	findAndPrintYearSales(monthlySalesList, "18");
-	findAndPrintYearSales(monthlySalesList, "19");
-
-	
-	Optional<MonthlySale> maxSalesObjectModel3 = monthlySalesList.stream()
-			.max(Comparator.comparingInt(MonthlySale::getSales));
-	
-	Optional<MonthlySale> minSalesObjectModel3 = monthlySalesList.stream()
-			.min(Comparator.comparingInt(MonthlySale::getSales));
-	
-	maxSalesObjectModel3.ifPresent(sales -> System.out.println("The best month for Model X was " + 
-						LocalDate.parse("01-" + sales.getDate(), DateTimeFormatter.ofPattern("dd-MMM-yy"))
-						.format(DateTimeFormatter.ofPattern("yyyy-MM"))));
-	
-	minSalesObjectModel3.ifPresent(sales -> System.out.println("The worst month for Model X was " + 
-			LocalDate.parse("01-" + sales.getDate(), DateTimeFormatter.ofPattern("dd-MMM-yy"))
-			.format(DateTimeFormatter.ofPattern("yyyy-MM"))));
-	
-	System.out.println();
-	
-	monthlySalesList.clear();
-	
-}
-
 }
