@@ -1,27 +1,31 @@
 package com.coderscampus;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 
 public class FileService {
 
-	public List<MonthlySale> readFile(String filepath, List<MonthlySale> monthlySalesList) {
+	public List<MonthlySale> readFile(String filepath) {
 		
+		List<MonthlySale> monthlySalesList = new ArrayList<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
 			String line;
 			br.readLine();
 			
 			while ((line = br.readLine()) != null) {
-				String date;
-				int sales;
 				
 				String[] singleMonthlySale = line.split(",");
 				
-				date = singleMonthlySale[0];
-				sales = Integer.valueOf(singleMonthlySale[1]);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yy").withLocale(Locale.US);
+				YearMonth date = YearMonth.parse(singleMonthlySale[0], formatter);
+				int sales = Integer.parseInt(singleMonthlySale[1]);
 				
 				MonthlySale monthlySale = new MonthlySale(date, sales);
 				
@@ -29,15 +33,9 @@ public class FileService {
 			}
 			
 			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("An error ocurred reading the file. The error was: " + e.getMessage());;
 		}
-		
-		return null;
-		
+		return monthlySalesList;
 	}
 }
